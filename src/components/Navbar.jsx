@@ -84,8 +84,13 @@ function Navbar(props) {
                 </Link> 
                 }
                 {userInfo &&
+                <Link style={navStyle} to= '/activity'>
+                <div className="userlink">Activity</div>
+                </Link> 
+                }
+                {userInfo &&
                 <div className="searchboxcont">
-                    <input placeholder="Search for a stock symbol (ex. AAPL)" value={searchInput} onChange={(e) => {this.setSearchInput(e.target.value); this.fetchSymbols(e.target.value)}}/>
+                    <input placeholder="Search for a stock symbol (ex. AAPL)" value={searchInput} onChange={(e) => {setSearchInput(e.target.value); fetchSymbols(e.target.value)}}/>
                     {searchResult}
                     <div className="searchresultcont">
                         {!searchResult &&

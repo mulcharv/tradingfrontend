@@ -50,7 +50,8 @@ function App() {
             <Route path="/login" element={<Login data={userDetails} onLogIn={Loginset}/>} />
             <Route path="/signup" element={<Signup data={userDetails}/>} />
             <Route path="/account" element={<Account data={userDetails} onLoad={CheckUserId}/>} />
-            <Route path="/portfolio" element={<Portfolio onLoad={CheckUserId}/>} />
+            <Route path="/activity" element={<Activity data={userDetails} onLoad={CheckUserId}/>} />
+            <Route path="/portfolio" element={<Portfolio data={userDetails} onLoad={CheckUserId}/>} />
             <Route path="/stock" element={<Stock />}>
               <Route path=":stockid" element={<StockPage data={userDetails} onLoad={CheckUserId} onCommUpd={postset}/>}/>
             </Route>
