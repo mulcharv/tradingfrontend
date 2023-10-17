@@ -1,24 +1,26 @@
 import { useState, useEffect } from "react";
 import { Link } from 'react-router-dom';
+import uniqid from 'uniqid';
+
 
 function Home(props) {
     const userDetails = props.data;
     const getUser = props.onLoad;
 
-    const [userId, setUserId] = useState('');
+    const [userId, setUserId] = useState(() => getUser());
     const [accErrMess, setAccErrMess] = useState('');
     const [accountData, setAccountData] = useState([]);
     const [prtfErrMess, setPrtfErrMess] = useState('');
     const [portfolioData, setPortfolioData] = useState([]);
     const [wlErrMess, setWlErrMess] = useState('');
-    const [watchlistData, setWatchlistData] = useState([]);
+    const [watchlistData, setWatchlistData] = useState(false);
 
 
 
     async function fetchDetails() {
         let userinfo = getUser();
-        setUserId(userinfo)
-        if (userDetails.length > 0) {
+        console.log(userId);
+        if (userId.length > 0) {
         const accurl = `https://tradingapi-production.up.railway.app/account/${userId}`;
         const headers = new Headers();
         headers.append('Authorization', `Bearer ` + JSON.parse(localStorage.getItem('jwt')));
@@ -52,23 +54,22 @@ function Home(props) {
         if (wldata.status === 404) {
             setWlErrMess(wldata.message)
         } else {
-            setWatchlistData(wldata)
-        }
-
-        if (watchlistData.stocks.length > 0) {
-            let tickers = [...watchlistData.stocks];
+            let tickers = wldata.stocks;
+            console.log(tickers);
             for (const ticker of tickers) {
                 let url = `https://tradingapi-production.up.railway.app/stocks/${ticker}/latestdata`;
                 const response = await fetch(url, fetchData);
                 const data = await response.json();
-                let index = tickers.findIndex(ticker);
+                let index = tickers.indexOf(ticker);
                 tickers[index] = {
                     symbol: ticker,
                     value: data.last
                 };
             }
             setWatchlistData(tickers);
-        } 
+        }
+
+           
     }
 }
 
@@ -76,9 +77,10 @@ useEffect(() => {
     fetchDetails();
 }, []);
 
+
 return(
-<div className="homePage">
-    {userDetails.length === 0 &&
+<div className="homepage">
+    {userId.length === 0 &&
     <div className="homeblurb">
         <div className="hbtexts">
             <div className="promotext">The premier mock trading application for investors starting their journey.</div>
@@ -100,13 +102,13 @@ return(
         </div>
     </div>
     }
-    {userDetails.length > 0 && 
+    {userId.length > 0 && 
     <div className="homeinfo">
-        <div className="homepagetitle">Welcome to your profile {userDetails}</div>
+        <div className="homepagetitle">Welcome to your profile </div>
         <Link to="/account">
         <div className="accounthome">
             <div className="acchometitle">Your account balance:</div>
-            <div className="acchomebalance">{accountData.balance}</div>
+            <div className="acchomebalance">${Number(accountData.balance).toFixed(2)}</div>
             <div className="acchomeactivity">Last deposit/withdrawal: {accountData.updatedAt_formatted}</div>
             <div className="acchomestart">Account created on: {accountData.createdAt_formatted}</div>
         </div>
@@ -114,23 +116,24 @@ return(
         <Link to="/portfolio">
         <div className="portfoliohome">
             <div className="prtfhometitle">Your portfolio value:</div>
-            <div className="prtfhomereal">{portfolioData.realizedTot}</div>
+            <div className="prtfhomereal">${Number(portfolioData.realizedTot).toFixed(2)}</div>
             <div className="prtfhomeactivity">Last buy/sell: {portfolioData.updatedAt_formatted}</div>
             <div className="prtfhomestart">Portfolio created on: {portfolioData.createdAt_formatted}</div>
         </div>
         </Link>
-        <div className="watchlist">
-            {watchlistData.stocks.length > 0 &&
+        <div className="watchlistcont">
+            <div className="watchlisttitle">Stock Watchlist:</div>
+            {watchlistData &&
                 <ul className="watchlist">
                     {watchlistData.map(stock => (
-                        <Link to={`/stock/${stock.symbol}`}>
-                        <li key={stock.symbol} className='wlitem'>
+                        <li key={uniqid()} className='wlitem'>
+                            <Link to={`/stock/${stock.symbol}`}>
                             <div className="wlcont">
                                 <div className="wlsymbol">{stock.symbol}</div>
-                                <div className="wlvalue">{stock.value}</div>
+                                <div className="wlvalue">${stock.value}</div>
                             </div>
+                            </Link>
                         </li>
-                        </Link>
                     ))}
                 </ul>
             }

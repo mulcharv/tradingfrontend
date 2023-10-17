@@ -10,10 +10,12 @@ import Account from './components/Account';
 import Portfolio from './components/Portfolio';
 import Stock from './components/Stock';
 import StockPage from './components/StockPage';
+import Activity from './components/Activity';
 
 function App() {
 
   const [userDetails, setUserDetails] = useState([]);
+  const [stockSymbol, setStockSymbol] = useState('')
 
   function CheckUserId () {
     let jtoken = localStorage.getItem('jwt')
@@ -41,6 +43,7 @@ function App() {
   }
 
 
+
   return (
     <HashRouter basename='/'>
         <div className='App'>
@@ -53,7 +56,7 @@ function App() {
             <Route path="/activity" element={<Activity data={userDetails} onLoad={CheckUserId}/>} />
             <Route path="/portfolio" element={<Portfolio data={userDetails} onLoad={CheckUserId}/>} />
             <Route path="/stock" element={<Stock />}>
-              <Route path=":stockid" element={<StockPage data={userDetails} onLoad={CheckUserId} onCommUpd={postset}/>}/>
+              <Route path=":stockid" element={<StockPage data={userDetails} onLoad={CheckUserId}/>}/>
             </Route>
           </Routes>
         </div>

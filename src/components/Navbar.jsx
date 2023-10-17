@@ -9,6 +9,7 @@ function Navbar(props) {
     const [searchInput, setSearchInput] = useState('');
     const [searchResult, setSearchResult] = useState(false);
     const onLo = props.onLogOut;
+    const onSearch = props.onSearch;
     let navigate = useNavigate();
 
 
@@ -19,8 +20,11 @@ function Navbar(props) {
 
     const gotoStock = () => {
         let symbfmt = searchInput.toUpperCase();
-        let path = `/stock/${symbfmt}`
+        let path = `/stock/${symbfmt}`;
         navigate(path);
+        setSearchResult(false);
+        setSearchInput('');
+        window.location.reload(); 
     }
 
     const jwtGet = () => {
@@ -47,6 +51,7 @@ function Navbar(props) {
         if (data.status === 404) {
             setSearchResult(false)
         } else {
+            console.log(data)
             setSearchResult(data)
         }
     }
@@ -90,16 +95,15 @@ function Navbar(props) {
                 }
                 {userInfo &&
                 <div className="searchboxcont">
-                    <input placeholder="Search for a stock symbol (ex. AAPL)" value={searchInput} onChange={(e) => {setSearchInput(e.target.value); fetchSymbols(e.target.value)}}/>
-                    {searchResult}
+                    <input className= "searchboxinput" placeholder="Search a stock symbol (ex. AAPL)" value={searchInput} onChange={(e) => {setSearchInput(e.target.value); fetchSymbols(e.target.value)}}/>
                     <div className="searchresultcont">
-                        {!searchResult &&
+                        {!searchResult && searchInput &&
                             <div className="noresult">No stocks found</div>
                         }
-                        {searchResult &&
+                        {searchResult && searchInput.length>0 &&
                         <div className="resultscont" onClick={gotoStock}>
                             <div className="resultsymbol">{searchResult.symbol}</div>
-                            <div className="resultsinfo">{searchResult.name} | {searchResult.stcok_exchange}, {searchResult.country}</div>
+                            <div className="resultsinfo">{searchResult.name} | {searchResult.stock_exchange.name}, {searchResult.country}</div>
                         </div>
                         }
                     </div>

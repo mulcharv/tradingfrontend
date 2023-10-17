@@ -5,15 +5,13 @@ function Activity(props) {
     const getUser = props.onLoad;
 
     const [transactions, setTransactions] = useState([]);
-    const [userId, setUserId] = useState('');
+    const [userId, setUserId] = useState(() => getUser());
     const [activityErr, setActivityErr] = useState('');
 
 
 
     async function fetchActivity() {
-        let userinfo = getUser();
-        setUserId(userinfo);
-        if (userDetails.length > 0) {
+        if (userId.length > 0) {
             const acturl = `https://tradingapi-production.up.railway.app/activity/${userId}`;
             const headers = new Headers();
             headers.append('Authorization', `Bearer ` + JSON.parse(localStorage.getItem('jwt')));
@@ -49,10 +47,10 @@ function Activity(props) {
                             <li key={transaction._id} className="transactioncont">
                                 <div className='transaction'>
                                     <div className='transactiontext'>
-                                        <div className='transactioninfo'>{transaction.activity}</div>
+                                        <div className='transactioninfo'>{transaction.action}</div>
                                         <div className='transactiondate'>{transaction.date}</div>
                                     </div>
-                                    <div className='transactionamount'>$ {transaction.amount}</div>
+                                    <div className='transactionamount'>$ {transaction.amount.toFixed(2)}</div>
                                 </div>
                             </li>
                         ))}

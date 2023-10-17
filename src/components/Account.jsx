@@ -4,7 +4,7 @@ function Account(props) {
     const userDetails = props.data;
     const getUser = props.onLoad;
 
-    const [userId, setUserId] = useState('');
+    const [userId, setUserId] = useState(() => getUser());
     const [accGetErr, setAccGetErr] = useState(false);
     const [accountData, setAccountData] = useState([]);
     const [accountAdd, setAccountAdd] = useState(0);
@@ -13,9 +13,7 @@ function Account(props) {
 
 
     async function fetchDetails() {
-        let userinfo = getUser();
-        setUserId(userinfo)
-        if (userDetails.length > 0) {
+        if (userId.length > 0) {
         const accurl = `https://tradingapi-production.up.railway.app/account/${userId}`;
         const headers = new Headers();
         headers.append('Authorization', `Bearer ` + JSON.parse(localStorage.getItem('jwt')));
@@ -35,8 +33,7 @@ function Account(props) {
     }
 
    async function handleSubmit(action) {
-        setAccPostErr('');
-        const url = `https://blogapi-production-8080.up.railway.app/account/${userId}`;
+        const url = `https://tradingapi-production.up.railway.app/account/${userId}`;
         let info = {
             amount: null,
             action: null,
@@ -53,10 +50,12 @@ function Account(props) {
         headers.append('Content-Type', 'application/json')
         headers.append('Authorization', `Bearer ` + JSON.parse(localStorage.getItem('jwt')));
         let fetchData = {
-            method: 'POST',
+            method: 'PUT',
             body: JSON.stringify(info),
             headers: headers,
         }
+
+        console.log(fetchData);
 
         const response = await fetch(url, fetchData);
         const data = await response.json();
@@ -64,6 +63,7 @@ function Account(props) {
         if (data.message) {
             setAccPostErr(data.message)
         } else {
+                setAccPostErr('');
                 setAccountData(data);
                 setAccountAdd(0);
                 setAccountWdraw(0);
@@ -86,7 +86,7 @@ function Account(props) {
         <div className="accountinfo">
         <div className="accountbalance">
             <div className="accountbalancetitle">Your current balance:</div>
-            <div className="accountbalancevalue">{accountData.balance}</div>
+            <div className="accountbalancevalue">${Number(accountData.balance).toFixed(2)}</div>
         </div>
         <div className="accountcreated">
             <div className="accountcreatedtitle">Account started on:</div>
@@ -103,18 +103,18 @@ function Account(props) {
                 <div className="accountaddtitle">Add to account:</div>
                 <div className="accountaddwrap">
                     <span className="currencysymb">$</span>
-                    <input type="number" placeholder="0.00" value={accountAdd} className="accountaddamount" onChange={(e) => setAccountAdd(e.target.value)}/>
+                    <input type="number" min="1" max="5000" required placeholder="0.00" value={accountAdd} className="accountaddamount" onChange={(e) => setAccountAdd(e.target.value)}/>
                 </div>
-                <button className="accountaddbtn" onClick={handleSubmit('add')}></button>
+                <button className="accountaddbtn" onClick={() => handleSubmit('add')}>Add</button>
             </div>
             {accountData.balance > 0 &&
             <div className="accountwdraw">
                 <div className="accountaddtitle">Withdraw from account:</div>
                 <div className="accountwdrawwrap">
                     <span className="currencysymb">$</span>
-                    <input type="number" placeholder="0.00" value={accountWdraw} className="accountwdrawamount" onChange={(e) => setAccountWdraw(e.target.value)}/>
+                    <input type="number" min="1" max="5000" required placeholder="0.00" value={accountWdraw} className="accountwdrawamount" onChange={(e) => setAccountWdraw(e.target.value)}/>
                 </div>
-                <button type='button' className="accountwdrawbtn" onClick={handleSubmit('withdraw')}></button>
+                <button type='button' className="accountwdrawbtn" onClick={() => handleSubmit('withdraw')}>Withdraw</button>
             </div>
             }   
         </div>

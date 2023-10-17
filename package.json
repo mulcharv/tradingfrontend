@@ -11,6 +11,8 @@
   },
   "dependencies": {
     "chart.js": "^4.4.0",
+    "chartjs-adapter-date-fns": "^3.0.0",
+    "date-fns": "^2.30.0",
     "jwt-decode": "^3.1.2",
     "luxon": "^3.4.3",
     "multer": "^1.4.5-lts.1",

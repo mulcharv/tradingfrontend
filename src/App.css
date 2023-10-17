@@ -1,8 +1,16 @@
+body {
+  height: 100%;
+  overflow-y:auto;
+  background-color: rgba(255,255,228,255);
+}
+
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
   text-align: center;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(255,255,228,255);
+  display: grid;
+  align-self: flex-start;
 }
 
 .logo {
@@ -39,4 +47,462 @@
 
 .read-the-docs {
   color: #888;
+}
+
+#root {
+  margin: 0;
+  padding: 0;
+}
+
+.stockimg {
+  width: 5vw;
+  height: 5vw;
+}
+
+.sitenav {
+  display: grid;
+  grid-auto-flow: column;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.titlecont {
+  margin-left: 1vw ;
+}
+
+.sitelinks {
+  display: grid;
+  grid-auto-flow: column;
+  gap: 2vw;
+  margin-right: 1vw
+}
+
+.userlink {
+  color:#013366;
+  font-size: 3vh;
+}
+
+.userlink:hover {
+  color:#7ac6ff
+}
+
+.hbimg {
+  width: 45vw;
+  height: 30vw;
+  margin-top: 1vw;
+}
+
+.hbtexts {
+  display: grid;
+  gap: 1vw;
+}
+
+.promotext {
+  font-size: 4vh;
+}
+
+.promologintext, .promosignuptext {
+  font-size: 2.5vh;
+}
+
+.promologinlink, .signuplink {
+  font-size: 2.3vh;
+  color:#7ac6ff
+}
+
+.promologinlink:hover, .signuplink:hover {
+  color:#07d0d1
+}
+
+.homeinfo {
+  display: grid;
+  gap: 4vw;
+  justify-content: center;
+}
+
+.accounthome, .portfoliohome {
+  padding: 2vw;
+  background-color: #013366;
+  color: #ffffff;
+  width: 40vw;
+  border-radius: 1.5vh;
+  box-shadow: 0.8vh 0.8vh 1vh #96a9bc;
+}
+
+.accounthome:hover, .portfoliohome:hover {
+  box-shadow: 0.8vh 0.8vh 1vh #ffff33;
+}
+
+.homepage{
+  margin-bottom: 15vh;
+}
+
+.homepagetitle {
+  font-size: 2vw;
+}
+
+.accountpage {
+  margin-bottom: 17vh;
+}
+
+.accounttitle {
+  font-size: 3vh;
+  margin-bottom: 1vw;
+  color: #013366
+}
+
+.accountinfo {
+  display: grid;
+  gap: 2vw;
+  margin-bottom: 1vw;
+}
+
+.accountactions {
+  display: grid;
+  gap: 2vw
+}
+
+.accountbalancetitle, .accountcreatedtitle, .accountupdatedtitle, .accountaddtitle {
+  font-size: 2.5vh;
+  color: #013366
+}
+
+.accountaddbtn, .accountwdrawbtn {
+  margin-top: 1vh;
+  background-color: #013366;
+  color: #ffff33;
+}
+
+.accountcreatedon, .accountupdatedon {
+  color: #7ac6ff;
+  font-weight:700
+}
+
+.accountbalancevalue {
+  color: #07d0d1;
+  font-weight: 700
+}
+
+.accountaddamount, .accountwdrawamount {
+  background-color: #85d8ff;
+  width: 6vw;
+  height: 1.8vw;
+}
+
+.stockgraph {
+  height: 30vh;
+}
+
+.graphcanvas {
+  height: 45vh;
+}
+
+canvas {
+  width: 100%;
+  height: 100%
+}
+
+.qntchgimg {
+  width: 2.5vw;
+  height: 2vw;
+}
+
+.transactionslist {
+  list-style-type: none;
+  display: grid;
+  gap: 1vw;
+  justify-content: center;
+}
+
+.activitytitle {
+font-size: 3vw;
+margin-left: 2vw;
+}
+
+.transactioncont {
+  width: 16vw;
+  color: #013366;
+  padding-top: 1vh;
+  padding-bottom: 1vh;
+  border-color: #013366;
+  border-style: solid;
+}
+
+.activitypage {
+  margin-bottom: 3vw;
+}
+
+.transactioninfo {
+  font-size: large;
+}
+
+.portfoliopage {
+  height: 100%;
+}
+
+.positionslist {
+  list-style-type: none;
+  display: grid;
+  gap: 4vh;
+  margin-top: 6vh;
+  justify-content: center;
+}
+
+.position {
+  display: grid;
+  grid-auto-flow: column;
+  justify-content: center;
+  gap: 2vw;
+  border-color: #013366;
+  border-style: solid;
+  width: 60vw;
+  padding: 1vh;
+}
+
+.position:hover {
+  border-color:#ffff33;
+}
+
+.portfoliotitle {
+  margin-bottom: 3vh;
+  font-size: 4vh;
+}
+
+.ptftickercont {
+  color:#013366;
+  font-size: 2.5vh;
+}
+
+.currpricetext, .quantitytext, .currvaluetext, .unrealizedtottext, .realizedtottext {
+  color:#013366;
+}
+
+.currpriceamount, .quantityamount, .currvalueamount, .unrealizedtotamount, .realizedtotamount {
+  color:#7ac6ff
+}
+
+.portfolioheader {
+  color:#013366;
+  font-size: 2.5vh;
+}
+
+.watchlist {
+  list-style-type: none;
+  padding: 0;
+  display: grid;
+  justify-content: center;
+}
+
+.watchlisttitle {
+  font-size: 3vh;
+}
+
+.titleinfo:hover {
+  color:#7ac6ff
+}
+
+.stocksecondsec {
+  display: grid;
+  grid-auto-flow: column;
+  justify-content: center;
+  gap: 5vw;
+  margin-top: 1vw;
+}
+
+.stockpageright {
+  display: grid;
+  align-content: center;
+}
+
+.graphfirstsec {
+  display: grid;
+  grid-auto-flow: column;
+  justify-content: center;
+  gap: 4vw
+}
+
+.graphtitle {
+  font-size: 2.5vh
+}
+
+.stockactiontitle {
+  font-size: 2.5vh;
+}
+
+.stocktitle {
+  font-size: 3vh;
+}
+
+.qntchgbtn {
+  padding: 0.3vh;
+  width: fit-content;
+}
+
+.stocktoggle {
+  display: grid;
+  grid-auto-flow: column;
+  gap: 2vh;
+  justify-content: center;
+}
+
+.holdinfocont {
+  display: grid;
+  grid-auto-flow: column;
+}
+
+.stockthirdsec {
+  margin-top: 3vh;
+  margin-bottom: 4vh;
+}
+
+.stockptftitle {
+  font-size: 2.5vh;
+}
+
+.searchboxinput {
+  width: 14vw;
+  height: 3.5vh;
+}
+
+.resultscont {
+  color:#013366;
+}
+
+.resultscont:hover {
+  color:#7ac6ff;
+  cursor: pointer;
+}
+
+.wlsymbol {
+  color:#013366;
+}
+
+.wlvalue {
+  color:#7ac6ff;
+}
+
+.wlcont {
+  border-color: #013366;
+  border-style: solid;
+  width: 8vw;
+}
+
+.wlcont:hover {
+  border-color:#ffff33;
+}
+
+.wltogbtn {
+  padding: 1vh
+}
+
+.logintitle {
+  font-size: 3vh;
+}
+
+.logincont {
+  color:#013366
+}
+
+.usernamelabel {
+  margin-top: 2vh;
+}
+
+.passwordcont {
+  margin-top: 2vh;
+}
+
+.loginfooter {
+  margin-top: 2vh;
+}
+
+.loginfooterlink {
+  color:#7ac6ff
+}
+
+.loginfooterlink:hover {
+  color:#07d0d1
+}
+
+.showhidebtn {
+  border-color: #013366;
+  margin-left: 1vw;
+}
+
+.showhidebtn:hover {
+  border-color: #7ac6ff;
+}
+
+.loginbtn {
+  border-color: #013366;
+  background-color: #7ac6ff;
+}
+
+.loginbtn:hover {
+  border-color: #ffff33;
+}
+
+.signupcont {
+  color:#013366
+}
+
+.signuptitle {
+  font-size: 3vh;
+}
+
+.confirmpasswordcont {
+  margin-bottom: 2vh;
+}
+
+.signupbtn, .logoutbtn {
+  border-color: #013366;
+  background-color: #7ac6ff;
+}
+
+.signupbtn:hover, .logoutbtn:hover {
+  border-color: #ffff33;
+}
+
+.stockmain button {
+  background-color: #dafee6;
+  border-color: #013366;
+}
+
+.stockmain button:hover {
+  cursor: pointer;
+  border-color: #ffff33;
+}
+
+.buybtn {
+  margin-right: 0.5vw;
+}
+
+.sellbtn {
+  margin-left: 0.5vw
+}
+
+.graphintervals {
+  margin-top: 1vh;
+}
+
+.intervalbtn {
+  margin-left: 0.3vw;
+  margin-right: 0.3vw;
+}
+
+.stockorderbtn {
+  display: grid;
+  width: fit-content;
+  justify-self: center;
+}
+
+.orderconfirm {
+  margin-right: 0.5vh;
+}
+
+.ordercancel {
+  margin-left: 0.5vh;
+}
+
+.holdquantity, .holdvalue, .holdperformance {
+  color:#7ac6ff;
 }

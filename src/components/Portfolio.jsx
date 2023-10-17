@@ -1,4 +1,7 @@
 import {useState, useEffect} from'react';
+import uniqid from 'uniqid';
+import { Link } from 'react-router-dom';
+
 
 function Portfolio(props) {
     const userDetails = props.data;
@@ -6,19 +9,20 @@ function Portfolio(props) {
 
     const [positions, setPositions] = useState([]);
     const [realizedTot, setRealizedTot] = useState('')
-    const [userId, setUserId] = useState('');
+    const [userId, setUserId] = useState(() => getUser());
     const [createdAt, setCreatedAt] = useState('');
     const [updatedAt, setUpdatedAt] = useState('');
     const [portfolioErr, setPortfolioErr] = useState(false);
     const [valueTotal, setValueTotal] = useState(0);
     const [currValue, setCurrValue] = useState(0);
-    const [newPositions, setNewPositions] = useState([]);
+    const [newPositions, setNewPositions] = useState(false);
+    const [listCreate, setListCreate] = useState(false);
 
     async function fetchPortfolio() {
         let userinfo = getUser();
         setUserId(userinfo);
 
-        if (userDetails.length > 0) {
+        if (userId.length > 0) {
             const ptfurl = `https://tradingapi-production.up.railway.app/portfolio/${userId}`;
             const headers = new Headers();
             headers.append('Authorization', `Bearer ` + JSON.parse(localStorage.getItem('jwt')));
@@ -38,20 +42,22 @@ function Portfolio(props) {
                 setUpdatedAt(ptfdata.updatedAt_formatted);
                 let ptftotal=0;
                 let currtotal=0;
-                let positionupd = [];
-                for (const position of positions) {
+                let positionupd= []
+                for (const position of ptfdata.positions) {
                     ptftotal = ptftotal + position.value
-                    let stockurl = `https://tradingapi-production.up.railway.app/stocks/${position.ticker}/latestdata`;
+                    let newposition = {};
+                    const newpst = Object.assign(newposition, position)
+                    let stockurl = `https://tradingapi-production.up.railway.app/stocks/${position.ticker}/latestdata`;     
                     let stockresponse = await fetch(stockurl, fetchData);
                     let stockdata = await stockresponse.json();
-                    position.currprice = stockdata.latest;
-                    position.currvalue = stockdata.latest*position.quantity;
-                    currtotal = currtotal + position.currvalue
-                    positionupd.push(position)
+                    newpst.currprice = stockdata.last;
+                    newpst.currvalue = stockdata.last*position.quantity;
+                    currtotal = currtotal + newpst.currvalue;
+                    positionupd.push(newpst)
                 }
                 setValueTotal(ptftotal);
                 setCurrValue(currtotal);
-                setNewPositions(positionupd);
+                setNewPositions(positionupd)
             }
     }
     }
@@ -60,6 +66,10 @@ function Portfolio(props) {
     useEffect(() => {
         fetchPortfolio();
     }, []);
+
+    useEffect(() => {}, [newPositions])
+
+    console.log(newPositions)
 
     return(
     <div className='portfoliopage'>
@@ -70,18 +80,20 @@ function Portfolio(props) {
         {!portfolioErr &&
         <div className='portfoliocont'>
             <div className='portfolioheader'>
-                <div className='portfoliovalue'>Total Value: ${currValue}</div>
-                <div className='realizedtot'>Realized Gain/Loss: ${realizedTot}</div>
-                <div className='unrealizedtot'>Unrealized Gain/Loss: ${currValue-valueTotal}</div>
+                <div className='portfoliovalue'>Total Value: ${currValue.toFixed(2)}</div>
+                <div className='realizedtot'>Realized Gain/Loss: ${Number(realizedTot).toFixed(2)}</div>
+                <div className='unrealizedtot'>Unrealized Gain/Loss: ${(currValue-valueTotal).toFixed(2)}</div>
                 <div className='portcreated'>Portfolio started on: {createdAt}</div>
                 <div className='portupdated'>Last Activity in portfolio: {updatedAt}</div>
             </div>
-        
-            {positions.length > 0 &&
+            <div className='positionslistcont'>
+            {newPositions &&
             <ul className='positionslist'>
-                {newPositions.map(position => {
-                    <li key={position._id} className='positioncont'>
+                {newPositions.map(position => (
+                    <li key={uniqid()} className='positioncont'>
+                        <Link to={`/stock/${position.ticker}`}>
                         <div className='position'>
+                            <div className='ptftickercont'>{position.ticker}</div>
                             <div className='currpricecont'>
                                 <div className='currpricetext'>Today's Price</div>
                                 <div className='currpriceamount'>${position.currprice}</div>
@@ -92,21 +104,23 @@ function Portfolio(props) {
                             </div>
                             <div className='currvaluecont'>
                                 <div className='currvaluetext'>Today's total value</div>
-                                <div className='currvalueamount'>${position.currvalue}</div>
+                                <div className='currvalueamount'>${Number(position.currvalue).toFixed(2)}</div>
                             </div>
                             <div className='unrealizedtotcont'>
                                 <div className='unrealizedtottext'>Unrealized gain/loss</div>
-                                <div className='unrealizedtotamount'>${position.currvalue-position.value}</div>
+                                <div className='unrealizedtotamount'>${(position.currvalue-position.value).toFixed(2)}</div>
                             </div>
                             <div className='realizedtotcont'>
                                 <div className='realizedtottext'>Realized gain/loss</div>
-                                <div className='realizedtotamount'>${position.realizedTot}</div>
+                                <div className='realizedtotamount'>${position.realized.toFixed(2)}</div>
                             </div>
                         </div>
+                        </Link>
                     </li>
-                })}
+                ))}
             </ul>
-            }
+        }
+        </div>
         </div>
         }
     </div>

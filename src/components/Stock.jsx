@@ -9,4 +9,4 @@ function Stock () {
     );
 };
 
-export default Post;
+export default Stock;

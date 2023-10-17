@@ -2,39 +2,12 @@ import { useState, useEffect } from "react";
 import { useParams, Link, useNavigate, Outlet } from "react-router-dom";
 import { Line } from 'react-chartjs-2';
 import {DateTime} from 'luxon';
-import {
-    Chart as ChartJS,
-    CategoryScale,
-    LinearScale,
-    PointElement,
-    LineElement,
-    Title,
-    Tooltip,
-    Legend,
-  } from 'chart.js';
+import { Chart as ChartJS, _adapters } from 'chart.js/auto'
+import { Chart }            from 'react-chartjs-2'
+import 'chartjs-adapter-date-fns';
+import { enGB } from "date-fns/locale";
 
 function StockPage(props) {
-    const [stockInfo, setStockInfo] = useState(false);
-    const [stockInfoError, setStockInfoError] = useState('');
-    const [stockLatest, setStockLatest] = useState(false);
-    const [stockLatestError, setStockLatestError] = useState('');
-    const [stockInterval, setStockInterval] = useState(false);
-    const [stockDifference, setStockDifference] = useState({amount: 0, percentage: 0});
-    const [interval, setInterval] = useState(1);
-    const [stockIntervalError, setStockIntervalError] = useState('');
-    const [quantity, setQuantity] = useState(0);
-    const [watchlist, setWatchList] = useState(false);
-    const [wlError, setWlError] = useState('');
-    const [inWl, setInWl] = useState(false);
-    const [inWlError, setInWlError] = useState('')
-    const [userId, setUserId] = useState('');
-    const [timeCapt, setTimeCapt] = useState('');
-    const [position, setPosition] = useState(false);
-    const [inPortfolioErr, setInPortfolioErr] = useState('');
-    const [stockAction, setStockAction] = useState('');
-    const [order, setOrder] = useState(false);
-    const [orderErr, setOrderErr] = useState('')
-
     let params = useParams();
     let stockid = params.stockid;
     let navigate = useNavigate();
@@ -49,30 +22,70 @@ function StockPage(props) {
         '365': 'year'
     }
 
+ 
+
+    const graphoptions = {
+        scales: {
+            x: {
+                type: 'time',
+                ticks: {
+                    display: false
+                },
+                adapters: {
+                    date: {
+                        locale: enGB
+                    }
+                }
+                
+            }
+        },
+        plugins: {
+            legend : {
+                display: false
+                }
+            },
+            responsive: true,
+    }
+
+    const [stockInfo, setStockInfo] = useState(false);
+    const [stockInfoError, setStockInfoError] = useState('');
+    const [stockLatest, setStockLatest] = useState(false);
+    const [stockLatestError, setStockLatestError] = useState('');
+    const [stockInterval, setStockInterval] = useState(false);
+    const [stockDifference, setStockDifference] = useState({amount: 0, percentage: 0});
+    const [interval, setInterval] = useState(1);
+    const [stockIntervalError, setStockIntervalError] = useState('');
+    const [quantity, setQuantity] = useState(0);
+    const [watchlist, setWatchList] = useState(false);
+    const [wlError, setWlError] = useState('');
+    const [inWl, setInWl] = useState(false);
+    const [inWlError, setInWlError] = useState('')
+    const [userId, setUserId] = useState(() => getUser());
+    const [timeCapt, setTimeCapt] = useState('');
+    const [position, setPosition] = useState(false);
+    const [inPortfolioErr, setInPortfolioErr] = useState('');
+    const [stockAction, setStockAction] = useState('');
+    const [order, setOrder] = useState(false);
+    const [orderErr, setOrderErr] = useState('');
+
+
+
+   
     const graphdata = {
         datasets: [{
             data: stockInterval,
             fill: true,
             backgroundColor: '#7ad3ff',
             borderColor: '#013365',
+            spanGaps: true
     
         }]
     }
 
-    const graphoptions = {
-        scales: {
-            x: {
-                ticks: {
-                    display: false
-                }
-            }
-        }
-    }
 
     async function stockGetInfo() {
-        let user = getUser();
-        setUserId(user);
-        
+        console.log(order);
+        console.log(userId);
         if (userId.length > 0) {
             const wlurl = `https://tradingapi-production.up.railway.app/watchlist/${userId}`;
             const headers = new Headers();
@@ -88,7 +101,7 @@ function StockPage(props) {
                 setWlError(wldata.message);
             } else {
                 setWatchList(wldata.stocks);
-                for (const ticker of watchlist) {
+                for (const ticker of wldata.stocks) {
                     if (ticker === stockid) {
                         setInWl(true);
                     }
@@ -96,8 +109,8 @@ function StockPage(props) {
             }
         }
 
-        if (userDetails.length > 0) {
-            const url = `https://tradingapi-production.up.railway.app/stock/${stockid}/info`;
+        if (userId.length > 0) {
+            const url = `https://tradingapi-production.up.railway.app/stocks/${stockid}/info`;
             const headers = new Headers();
             headers.append('Authorization', `Bearer ` + JSON.parse(localStorage.getItem('jwt')));
             let fetchData = {
@@ -111,8 +124,6 @@ function StockPage(props) {
                 setStockInfoError(data.message)
             } else {
                 setStockInfo(data)
-            }
-
             const ptfurl = `https://tradingapi-production.up.railway.app/portfolio/${userId}`;
             const ptfresponse = await fetch(ptfurl, fetchData);
             const ptfdata = await ptfresponse.json();
@@ -122,17 +133,20 @@ function StockPage(props) {
             } else {
                 let positions = ptfdata.positions;
                 for (const position of positions) {
-                    if (position.ticker === stockInfo.symbol) {
+                    if (position.ticker === data.symbol) {
                         setPosition(position);                        
                     }
                 }
             }
+            }
+
+            
         }
     }
 
 async function stockGetLatest() {
-    if (userDetails.length > 0) {
-        const url = `https://tradingapi-production.up.railway.app/stock/${stockid}/latestdata`;
+    if (userId.length > 0) {
+        const url = `https://tradingapi-production.up.railway.app/stocks/${stockid}/latestdata`;
         const headers = new Headers();
         headers.append('Authorization', `Bearer ` + JSON.parse(localStorage.getItem('jwt')));
         let fetchData = {
@@ -152,7 +166,7 @@ async function stockGetLatest() {
             let datesec = date.getSeconds();
             let ampm;
             if (datehours > 12) {
-                datehrnew = datehours - 12;
+                datehours = datehours - 12;
                 ampm = 'PM'
             } else {
                 ampm = 'AM'
@@ -164,8 +178,8 @@ async function stockGetLatest() {
 }
 
 async function stockGetInterval() {
-    if (userDetails.length > 0) {
-        const url = `https://tradingapi-production.up.railway.app/stock/${stockid}/${interval}`;
+    if (userId.length > 0) {
+        const url = `https://tradingapi-production.up.railway.app/stocks/${stockid}/interval/${interval}`;
         const headers = new Headers();
         headers.append('Authorization', `Bearer ` + JSON.parse(localStorage.getItem('jwt')));
         let fetchData = {
@@ -178,15 +192,16 @@ async function stockGetInterval() {
         if (data.status === 404) {
             setStockIntervalError(data.message)
         } else {
-            let alldata = data.data;
+            console.log(data)
             let dataflt = [];
-            for (const entry of alldata) {
+            for (const entry of data) {
                 let point = {
                     x: new Date(entry.date),
                     y: entry.last
                 }
                 dataflt.push(point)
             }
+            console.log(dataflt);
             setStockInterval(dataflt);
             let firstpoint = dataflt[dataflt.length-1];
             let lastpoint = dataflt[0];
@@ -208,7 +223,7 @@ async function handleWatchlist(action) {
         action: action
     }
     let fetchData = {
-        method: 'POST',
+        method: 'PUT',
         body: JSON.stringify(info),
         headers: headers
     }
@@ -248,7 +263,6 @@ const handleStockAmount = (sign) => {
 }
 
 async function handleStockOrder() {
-    await stockGetLatest();
     setOrder(true);
 }
 
@@ -256,7 +270,7 @@ async function handleStockFinal(decision) {
     if (decision === 'cancel') {
         setOrder(false)
     } else {
-        const ordurl = `https://tradingapi-production.up.railway.app/stocks/${stockid}`;
+        const ordurl = `https://tradingapi-production.up.railway.app/portfolio/${stockid}`;
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
     headers.append('Authorization', `Bearer ` + JSON.parse(localStorage.getItem('jwt')));
@@ -267,7 +281,7 @@ async function handleStockFinal(decision) {
         userid: userId,
     }
     let fetchData = {
-        method: 'POST',
+        method: 'PUT',
         body: JSON.stringify(info),
         headers: headers
     }
@@ -286,11 +300,15 @@ async function handleStockFinal(decision) {
                 if (tickarr.includes(stockInfo.symbol)) {
                     for (const position of positions) {
                         if (position.ticker === stockInfo.symbol) {
-                            setPosition(position);                        
+                            setPosition(position);
+                            setQuantity(0);                        
+                            setOrder(false);
                         }
                     }
                 } else {
                     setPosition(false);
+                    setQuantity(0);                      
+                    setOrder(false);
                 }
 
     }
@@ -300,8 +318,6 @@ async function handleStockFinal(decision) {
 
 async function handleInterval(option) {
     setInterval(option);
-    await stockGetLatest();
-    await stockGetInterval();
 }
     
 
@@ -309,25 +325,27 @@ async function handleInterval(option) {
         stockGetInfo();
         stockGetLatest();
         stockGetInterval();
-    }, []);
+    }, [interval, order]);
+
+
     
     return (
         <div className="stockpage">
-            {!stock && 
+            {!stockInfo && 
             <div className="stockmiss">Stock not found</div>
             }
-            {stock &&
+            {stockInfo &&
             <div className="stockcont">
                 <div className="stockfirstsec">
                     <div className="stocktitle">{stockInfo.symbol} | {stockInfo.name}</div>
                     <div className="wishlisttoggle"></div>
                     {inWl &&
-                    <button className="wltogbtn" onClick={handleWatchlist('remove')}>Remove from watchlist</button>
+                    <button className="wltogbtn" onClick={() => handleWatchlist('remove')}>Remove from watchlist</button>
                     }
                     {!inWl &&
-                    <button className="wltogbtn" onClick={handleWatchlist('add')}>Add to watchlist</button>
+                    <button className="wltogbtn" onClick={() => handleWatchlist('add')}>Add to watchlist</button>
                     }
-                </div>
+                </div> 
                 <div className="stocksecondsec">
                     <div className="stockpageleft">
                     <div className="graphtitle">Performance</div>
@@ -349,54 +367,56 @@ async function handleInterval(option) {
                     <div className="timecaptured">As of {timeCapt}</div>
                     </div>
                     <div className="graphfirstright">
-                    <button type='button' onClick={handleUpdate}>Update Price</button>
+                    <button type='button' onClick={() => handleUpdate()}>Update Price</button>
                     </div>
                     </div>
                     <div className="graphcont">
+                    <div className="graphcanvas">
                     <Line options={graphoptions} data={graphdata}/>
+                    </div>
                     <div className="graphintervals">
-                        <button type="button" className="intervalbtn" onClick={handleInterval(1)}>1D</button>
-                        <button type="button" className="intervalbtn" onClick={handleInterval(7)}>1W</button>
-                        <button type="button" className="intervalbtn" onClick={handleInterval(30)}>1M</button>
-                        <button type="button" className="intervalbtn" onClick={handleInterval(90)}>3M</button>
-                        <button type="button" className="intervalbtn" onClick={handleInterval(180)}>6M</button>
-                        <button type="button" className="intervalbtn" onClick={handleInterval(365)}>1Y</button>
+                        <button type="button" className="intervalbtn" onClick={() => handleInterval(1)}>1D</button>
+                        <button type="button" className="intervalbtn" onClick={() => handleInterval(7)}>1W</button>
+                        <button type="button" className="intervalbtn" onClick={() => handleInterval(30)}>1M</button>
+                        <button type="button" className="intervalbtn" onClick={() => handleInterval(90)}>3M</button>
+                        <button type="button" className="intervalbtn" onClick={() => handleInterval(180)}>6M</button>
+                        <button type="button" className="intervalbtn" onClick={() => handleInterval(365)}>1Y</button>
                     </div>
                     </div>
                     </div>
                     <div className="stockpageright">
                         <div className="stockactiontitle">Place an order</div>
                         <div className="stockactioncont">
-                            <button type="button" className="buybtn" onClick={handleStockAction('buy')}>Buy</button>
+                            <button type="button" className="buybtn" onClick={() => handleStockAction('buy')}>Buy</button>
                             {position &&
-                            <button type="button" className="sellbtn" onClick={handleStockAction('sell')}>Sell</button>
+                            <button type="button" className="sellbtn" onClick={() => handleStockAction('sell')}>Sell</button>
                             }
                         </div>
                         <div className="quantitycont">
                             <div className="stockprompt">How many shares?</div>
                             <div className="quantity">{quantity}</div>
                             <div className="stocktoggle">
-                                <button type='button' className="qntchgbtn" onClick={handleStockAmount('plus')}><img className="qntchgimg" src={'./pluscircle.svg'} alt=''></img></button>
-                                <button type='button' className="qntchgbtn" onClick={handleStockAmount('minus')}><img className="qntchgimg" src={'./minuscircle.svg'} alt=''></img></button>
+                                <button type='button' className="qntchgbtn" onClick={() => handleStockAmount('plus')}><img className="qntchgimg" src={'./pluscircle.svg'} alt=''></img></button>
+                                <button type='button' className="qntchgbtn" onClick={() => handleStockAmount('minus')}><img className="qntchgimg" src={'./minuscircle.svg'} alt=''></img></button>
                             </div>
                         </div>
                         <div className="stockprice">{stockInfo.symbol} price: ${stockLatest.last} USD</div>
                         <div className="stocktotal">${(stockLatest.last)*(quantity)} USD</div>
                         {stockAction === 'buy' &&
-                        <button type="button" className="stockorderbtn" onClick={handleStockOrder}>Buy {stockInfo.symbol}</button>
+                        <button type="button" className="stockorderbtn" onClick={() => handleStockOrder()}>Buy {stockInfo.symbol}</button>
                         }
                         {stockAction === 'sell' &&
-                        <button type="button" className="stockorderbtn" onClick={handleStockOrder}>Sell {stockInfo.symbol}</button>
+                        <button type="button" className="stockorderbtn" onClick={() => handleStockOrder()}>Sell {stockInfo.symbol}</button>
                         }
                         {order &&
                         <div className="ordercont">
                             <div className="ordernumber">Number of shares: {quantity}</div>
                             <div className="orderprice">Updated price: {stockLatest.last}</div>
                             <div className="ordertotal">Total price: {quantity*stockLatest.last}</div>
-                            <button className="orderconfirm" onClick={handleStockFinal('confirm')}>Confirm Order</button>
-                            <button className="ordercancel" onClick={handleStockFinal('cancel')}>Cancel this order</button>
+                            <button className="orderconfirm" onClick={() => handleStockFinal('confirm')}>Confirm Order</button>
+                            <button className="ordercancel" onClick={() => handleStockFinal('cancel')}>Cancel order</button>
                         </div>
-                        } 
+                        }
                     </div>
                 </div>
                 {position &&
@@ -409,11 +429,11 @@ async function handleInterval(option) {
                         </div>
                         <div className="holdvaluecont">
                             <div className="holdvaluetitle">Total Value</div>
-                            <div className="holdvalue">{position.quantity}*{stockLatest.last}</div>
+                            <div className="holdvalue">${position.quantity*stockLatest.last}</div>
                         </div>
                         <div className="holdperfcont">
                             <div className="holdperftitle">All time performance</div>
-                            <div className="holdperformance">{(stockLatest.last*position.quantity)-(position.value)}</div>
+                            <div className="holdperformance">${((stockLatest.last*position.quantity)-(position.value)).toFixed(2)}</div>
                         </div>
                     </div>
                 </div>
