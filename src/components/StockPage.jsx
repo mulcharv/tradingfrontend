@@ -268,7 +268,9 @@ async function handleStockOrder() {
 
 async function handleStockFinal(decision) {
     if (decision === 'cancel') {
-        setOrder(false)
+        setOrder(false);
+        setOrderErr('');
+        setQuantity(0);
     } else {
         const ordurl = `https://tradingapi-production.up.railway.app/portfolio/${stockid}`;
     const headers = new Headers();
@@ -332,7 +334,7 @@ async function handleInterval(option) {
     return (
         <div className="stockpage">
             {!stockInfo && 
-            <div className="stockmiss">Stock not found</div>
+            <div className="stockmiss">Stock data loading...</div>
             }
             {stockInfo &&
             <div className="stockcont">
@@ -351,7 +353,7 @@ async function handleInterval(option) {
                     <div className="graphtitle">Performance</div>
                     <div className="graphfirstsec">
                     <div className="graphfirstleft">
-                    <div className="currentprice">$ {stockLatest.last} USD</div>
+                    <div className="currentprice">$ {Number(stockLatest.last).toFixed(2)} USD</div>
                     {stockDifference > 0 &&
                     <div className="stockdiffcont">
                     <div className="stockupsymb"><img src={'/up.svg'} alt='' className='infoimg'></img></div>
@@ -400,7 +402,7 @@ async function handleInterval(option) {
                                 <button type='button' className="qntchgbtn" onClick={() => handleStockAmount('minus')}><img className="qntchgimg" src={'./minuscircle.svg'} alt=''></img></button>
                             </div>
                         </div>
-                        <div className="stockprice">{stockInfo.symbol} price: ${stockLatest.last} USD</div>
+                        <div className="stockprice">{stockInfo.symbol} price: ${Number(stockLatest.last).toFixed(2)} USD</div>
                         <div className="stocktotal">${(stockLatest.last)*(quantity)} USD</div>
                         {stockAction === 'buy' &&
                         <button type="button" className="stockorderbtn" onClick={() => handleStockOrder()}>Buy {stockInfo.symbol}</button>
@@ -415,6 +417,7 @@ async function handleInterval(option) {
                             <div className="ordertotal">Total price: {quantity*stockLatest.last}</div>
                             <button className="orderconfirm" onClick={() => handleStockFinal('confirm')}>Confirm Order</button>
                             <button className="ordercancel" onClick={() => handleStockFinal('cancel')}>Cancel order</button>
+                            <div className="ordererr">{orderErr}</div>
                         </div>
                         }
                     </div>
@@ -429,7 +432,7 @@ async function handleInterval(option) {
                         </div>
                         <div className="holdvaluecont">
                             <div className="holdvaluetitle">Total Value</div>
-                            <div className="holdvalue">${position.quantity*stockLatest.last}</div>
+                            <div className="holdvalue">${position.quantity*stockLatest.last.toFixed(2)}</div>
                         </div>
                         <div className="holdperfcont">
                             <div className="holdperftitle">All time performance</div>
