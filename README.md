@@ -4,7 +4,7 @@
 
 This is the front end code-base for my full stack trading web site, the backend API of which can be found <a href="https://github.com/mulcharv/tradingapi/tree/main" target="blank">here</a>. Features of this project include: 
 
-* Pages for visitors to sign up and login
+* Pages for visitors to sign up and login.
 * A responsive navigation bar that provides links for the user to signup and/or login if no JWT present. If a JWT is present, it provides links to logout, the user's account, portfolio, and activity. 
 * In addition to the above, when logged in the navigation bar has a search bar in which stock symbols can be input for links to their respective pages to populate below it
 * A home page that prompts user to login/signup if no JWT present, and shows summaries of the user's account, portfolio, and watchlist if logged in.
