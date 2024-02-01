@@ -15,7 +15,7 @@ function Login(props) {
     const handleSubmit = (event) => {
         event.preventDefault();
         setLoginError([]);
-        const url = 'https://mongodb-production-3bca.up.railway.app/login';
+        const url = 'https://tradingapi-production.up.railway.app/login';
         let data = {
             username: username,
             password: password,

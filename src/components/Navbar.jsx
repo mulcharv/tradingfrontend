@@ -38,7 +38,7 @@ function Navbar(props) {
     }
 
     async function fetchSymbols(symbol) {
-        const url = `https://mongodb-production-3bca.up.railway.app/stocks/${symbol}/info`;
+        const url = `https://tradingapi-production.up.railway.app/stocks/${symbol}/info`;
         const headers = new Headers();
         headers.append('Authorization', `Bearer ` + JSON.parse(localStorage.getItem('jwt')));
         let fetchData = {
