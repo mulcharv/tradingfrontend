@@ -23,7 +23,7 @@ function Portfolio(props) {
         setUserId(userinfo);
 
         if (userId.length > 0) {
-            const ptfurl = `https://tradingapi-production.up.railway.app/portfolio/${userId}`;
+            const ptfurl = `https://mongodb-production-3bca.up.railway.app/${userId}`;
             const headers = new Headers();
             headers.append('Authorization', `Bearer ` + JSON.parse(localStorage.getItem('jwt')));
             let fetchData = {
@@ -47,7 +47,7 @@ function Portfolio(props) {
                     ptftotal = ptftotal + position.value
                     let newposition = {};
                     const newpst = Object.assign(newposition, position)
-                    let stockurl = `https://tradingapi-production.up.railway.app/stocks/${position.ticker}/latestdata`;     
+                    let stockurl = `https://mongodb-production-3bca.up.railway.app/stocks/${position.ticker}/latestdata`;     
                     let stockresponse = await fetch(stockurl, fetchData);
                     let stockdata = await stockresponse.json();
                     newpst.currprice = stockdata.last;

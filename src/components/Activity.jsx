@@ -12,7 +12,7 @@ function Activity(props) {
 
     async function fetchActivity() {
         if (userId.length > 0) {
-            const acturl = `https://tradingapi-production.up.railway.app/activity/${userId}`;
+            const acturl = `https://mongodb-production-3bca.up.railway.app/activity/${userId}`;
             const headers = new Headers();
             headers.append('Authorization', `Bearer ` + JSON.parse(localStorage.getItem('jwt')));
             let fetchData = {

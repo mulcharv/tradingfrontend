@@ -87,7 +87,7 @@ function StockPage(props) {
         console.log(order);
         console.log(userId);
         if (userId.length > 0) {
-            const wlurl = `https://tradingapi-production.up.railway.app/watchlist/${userId}`;
+            const wlurl = `https://mongodb-production-3bca.up.railway.app/watchlist/${userId}`;
             const headers = new Headers();
             headers.append('Authorization', `Bearer ` + JSON.parse(localStorage.getItem('jwt')));
             let fetchData = {
@@ -110,7 +110,7 @@ function StockPage(props) {
         }
 
         if (userId.length > 0) {
-            const url = `https://tradingapi-production.up.railway.app/stocks/${stockid}/info`;
+            const url = `https://mongodb-production-3bca.up.railway.app/stocks/${stockid}/info`;
             const headers = new Headers();
             headers.append('Authorization', `Bearer ` + JSON.parse(localStorage.getItem('jwt')));
             let fetchData = {
@@ -124,7 +124,7 @@ function StockPage(props) {
                 setStockInfoError(data.message)
             } else {
                 setStockInfo(data)
-            const ptfurl = `https://tradingapi-production.up.railway.app/portfolio/${userId}`;
+            const ptfurl = `https://mongodb-production-3bca.up.railway.app/portfolio/${userId}`;
             const ptfresponse = await fetch(ptfurl, fetchData);
             const ptfdata = await ptfresponse.json();
 
@@ -146,7 +146,7 @@ function StockPage(props) {
 
 async function stockGetLatest() {
     if (userId.length > 0) {
-        const url = `https://tradingapi-production.up.railway.app/stocks/${stockid}/latestdata`;
+        const url = `https://mongodb-production-3bca.up.railway.app/stocks/${stockid}/latestdata`;
         const headers = new Headers();
         headers.append('Authorization', `Bearer ` + JSON.parse(localStorage.getItem('jwt')));
         let fetchData = {
@@ -179,7 +179,7 @@ async function stockGetLatest() {
 
 async function stockGetInterval() {
     if (userId.length > 0) {
-        const url = `https://tradingapi-production.up.railway.app/stocks/${stockid}/interval/${interval}`;
+        const url = `https://mongodb-production-3bca.up.railway.app/stocks/${stockid}/interval/${interval}`;
         const headers = new Headers();
         headers.append('Authorization', `Bearer ` + JSON.parse(localStorage.getItem('jwt')));
         let fetchData = {
@@ -215,7 +215,7 @@ async function stockGetInterval() {
 }
 
 async function handleWatchlist(action) {
-    const url = `https://tradingapi-production.up.railway.app/watchlist/${userId}/${stockid}`;
+    const url = `https://mongodb-production-3bca.up.railway.app/watchlist/${userId}/${stockid}`;
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
     headers.append('Authorization', `Bearer ` + JSON.parse(localStorage.getItem('jwt')));
@@ -272,7 +272,7 @@ async function handleStockFinal(decision) {
         setOrderErr('');
         setQuantity(0);
     } else {
-        const ordurl = `https://tradingapi-production.up.railway.app/portfolio/${stockid}`;
+        const ordurl = `https://mongodb-production-3bca.up.railway.app/portfolio/${stockid}`;
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
     headers.append('Authorization', `Bearer ` + JSON.parse(localStorage.getItem('jwt')));
