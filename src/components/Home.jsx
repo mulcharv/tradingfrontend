@@ -21,7 +21,7 @@ function Home(props) {
         let userinfo = getUser();
         console.log(userId);
         if (userId.length > 0) {
-        const accurl = `https://tradingapideploy-2cfabb06dbc1.herokuapp.com/account/${userId}`;
+        const accurl = `https://web-production-8952.up.railway.app/account/${userId}`;
         const headers = new Headers();
         headers.append('Authorization', `Bearer ` + JSON.parse(localStorage.getItem('jwt')));
         let fetchData = {
@@ -37,7 +37,7 @@ function Home(props) {
             setAccountData(accdata)
         }
 
-        const prtfurl = `https://tradingapideploy-2cfabb06dbc1.herokuapp.com/portfolio/${userId}`;
+        const prtfurl = `https://web-production-8952.up.railway.app/portfolio/${userId}`;
         const prtfresponse = await fetch(prtfurl, fetchData);
         const prtfdata = await prtfresponse.json();
 
@@ -47,7 +47,7 @@ function Home(props) {
             setPortfolioData(prtfdata)
         }
 
-        const wlurl = `https://tradingapideploy-2cfabb06dbc1.herokuapp.com/watchlist/${userId}`;
+        const wlurl = `https://web-production-8952.up.railway.app/watchlist/${userId}`;
         const wlresponse = await fetch(wlurl, fetchData);
         const wldata = await wlresponse.json();
 
@@ -57,7 +57,7 @@ function Home(props) {
             let tickers = wldata.stocks;
             console.log(tickers);
             for (const ticker of tickers) {
-                let url = `https://tradingapideploy-2cfabb06dbc1.herokuapp.com/stocks/${ticker}/latestdata`;
+                let url = `https://web-production-8952.up.railway.app/stocks/${ticker}/latestdata`;
                 const response = await fetch(url, fetchData);
                 const data = await response.json();
                 let index = tickers.indexOf(ticker);

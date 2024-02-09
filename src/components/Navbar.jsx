@@ -38,7 +38,7 @@ function Navbar(props) {
     }
 
     async function fetchSymbols(symbol) {
-        const url = `https://tradingapideploy-2cfabb06dbc1.herokuapp.com/stocks/${symbol}/info`;
+        const url = `https://web-production-8952.up.railway.app/stocks/${symbol}/info`;
         const headers = new Headers();
         headers.append('Authorization', `Bearer ` + JSON.parse(localStorage.getItem('jwt')));
         let fetchData = {

@@ -12,7 +12,7 @@ function Activity(props) {
 
     async function fetchActivity() {
         if (userId.length > 0) {
-            const acturl = `https://tradingapideploy-2cfabb06dbc1.herokuapp.com/activity/${userId}`;
+            const acturl = `https://web-production-8952.up.railway.app/activity/${userId}`;
             const headers = new Headers();
             headers.append('Authorization', `Bearer ` + JSON.parse(localStorage.getItem('jwt')));
             let fetchData = {
