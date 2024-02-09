@@ -14,7 +14,7 @@ function Account(props) {
 
     async function fetchDetails() {
         if (userId.length > 0) {
-        const accurl = `https://tradingapi-production.up.railway.app/account/${userId}`;
+        const accurl = `https://tradingapideploy-2cfabb06dbc1.herokuapp.com/account/${userId}`;
         const headers = new Headers();
         headers.append('Authorization', `Bearer ` + JSON.parse(localStorage.getItem('jwt')));
         let fetchData = {
@@ -33,7 +33,7 @@ function Account(props) {
     }
 
    async function handleSubmit(action) {
-        const url = `https://tradingapi-production.up.railway.app/account/${userId}`;
+        const url = `https://tradingapideploy-2cfabb06dbc1.herokuapp.com/account/${userId}`;
         let info = {
             amount: null,
             action: null,

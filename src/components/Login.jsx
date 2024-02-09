@@ -15,7 +15,7 @@ function Login(props) {
     const handleSubmit = (event) => {
         event.preventDefault();
         setLoginError([]);
-        const url = 'https://tradingapi-production.up.railway.app/login';
+        const url = 'https://tradingapideploy-2cfabb06dbc1.herokuapp.com/login';
         let data = {
             username: username,
             password: password,
