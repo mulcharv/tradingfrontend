@@ -155,12 +155,12 @@ async function stockGetLatest() {
         }
         const response = await fetch(url, fetchData);
         const data = await response.json();
+        console.log(data);
 
         if (data.status === 404) {
             setStockLatestError(data.message)
         } else {
             setStockLatest(data);
-            console.log(stockLatest);
             let date = new Date();
             let datehours = date.getHours();
             let datemin = date.getMinutes();
