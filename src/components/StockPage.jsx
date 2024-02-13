@@ -146,7 +146,7 @@ function StockPage(props) {
 
 async function stockGetLatest() {
     if (userId.length > 0) {
-        const url = `https://web-production-8952.up.railway.app/${stockid}/latestdata`;
+        const url = `https://web-production-8952.up.railway.app/stocks/${stockid}/latestdata`;
         const headers = new Headers();
         headers.append('Authorization', `Bearer ` + JSON.parse(localStorage.getItem('jwt')));
         let fetchData = {
@@ -179,7 +179,7 @@ async function stockGetLatest() {
 
 async function stockGetInterval() {
     if (userId.length > 0) {
-        const url = `https://web-production-8952.up.railway.app/${stockid}/interval/${interval}`;
+        const url = `https://web-production-8952.up.railway.app/stocks/${stockid}/interval/${interval}`;
         const headers = new Headers();
         headers.append('Authorization', `Bearer ` + JSON.parse(localStorage.getItem('jwt')));
         let fetchData = {
