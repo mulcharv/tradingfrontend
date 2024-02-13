@@ -159,8 +159,8 @@ async function stockGetLatest() {
         if (data.status === 404) {
             setStockLatestError(data.message)
         } else {
-            console.log(data);
             setStockLatest(data);
+            console.log(stockLatest);
             let date = new Date();
             let datehours = date.getHours();
             let datemin = date.getMinutes();
