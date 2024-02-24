@@ -162,7 +162,7 @@ async function stockGetLatest() {
         } else {
             let datalatest = data;
             if (datalatest.last == null) {
-                datalatest.last = high
+                datalatest.last = datalatest.high
             }
             setStockLatest(datalatest);
             let date = new Date();
