@@ -160,7 +160,11 @@ async function stockGetLatest() {
         if (data.status === 404) {
             setStockLatestError(data.message)
         } else {
-            setStockLatest(data);
+            let datalatest = data;
+            if (datalatest.last == null) {
+                datalatest.last = high
+            }
+            setStockLatest(datalatest);
             let date = new Date();
             let datehours = date.getHours();
             let datemin = date.getMinutes();
