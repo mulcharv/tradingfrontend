@@ -1,12 +1,12 @@
-import { useState, useEffect } from "react";
-import { useParams, Link, useNavigate, Outlet } from "react-router-dom";
-import { Line } from "react-chartjs-2";
-import { DateTime } from "luxon";
-import { Chart as ChartJS, _adapters } from "chart.js/auto";
-import { Chart } from "react-chartjs-2";
-import "chartjs-adapter-date-fns";
-import { enGB } from "date-fns/locale";
-import { useCallback } from "react";
+import { useState, useEffect } from 'react';
+import { useParams, Link, useNavigate, Outlet } from 'react-router-dom';
+import { Line } from 'react-chartjs-2';
+import { DateTime } from 'luxon';
+import { Chart as ChartJS, _adapters } from 'chart.js/auto';
+import { Chart } from 'react-chartjs-2';
+import 'chartjs-adapter-date-fns';
+import { enGB } from 'date-fns/locale';
+import { useCallback } from 'react';
 
 function StockPage(props) {
   let params = useParams();
@@ -15,18 +15,18 @@ function StockPage(props) {
   const getUser = props.onLoad;
   const userDetails = props.data;
   const intervaldesc = {
-    1: "day",
-    7: "week",
-    30: "month",
-    90: "3 months",
-    180: "6 months",
-    365: "year",
+    1: 'day',
+    7: 'week',
+    30: 'month',
+    90: '3 months',
+    180: '6 months',
+    365: 'year',
   };
 
   const graphoptions = {
     scales: {
       x: {
-        type: "time",
+        type: 'time',
         ticks: {
           display: false,
         },
@@ -46,36 +46,36 @@ function StockPage(props) {
   };
 
   const [stockInfo, setStockInfo] = useState(false);
-  const [stockInfoError, setStockInfoError] = useState("");
+  const [stockInfoError, setStockInfoError] = useState('');
   const [stockLatest, setStockLatest] = useState(false);
-  const [stockLatestError, setStockLatestError] = useState("");
+  const [stockLatestError, setStockLatestError] = useState('');
   const [stockInterval, setStockInterval] = useState(false);
   const [stockDifference, setStockDifference] = useState({
     amount: 0,
     percentage: 0,
   });
   const [interval, setInterval] = useState(1);
-  const [stockIntervalError, setStockIntervalError] = useState("");
+  const [stockIntervalError, setStockIntervalError] = useState('');
   const [quantity, setQuantity] = useState(0);
   const [watchlist, setWatchList] = useState(false);
-  const [wlError, setWlError] = useState("");
+  const [wlError, setWlError] = useState('');
   const [inWl, setInWl] = useState(false);
-  const [inWlError, setInWlError] = useState("");
+  const [inWlError, setInWlError] = useState('');
   const [userId, setUserId] = useState(() => getUser());
-  const [timeCapt, setTimeCapt] = useState("");
+  const [timeCapt, setTimeCapt] = useState('');
   const [position, setPosition] = useState(false);
-  const [inPortfolioErr, setInPortfolioErr] = useState("");
-  const [stockAction, setStockAction] = useState("");
+  const [inPortfolioErr, setInPortfolioErr] = useState('');
+  const [stockAction, setStockAction] = useState('');
   const [order, setOrder] = useState(false);
-  const [orderErr, setOrderErr] = useState("");
+  const [orderErr, setOrderErr] = useState('');
 
   const graphdata = {
     datasets: [
       {
         data: stockInterval,
         fill: true,
-        backgroundColor: "#7ad3ff",
-        borderColor: "#013365",
+        backgroundColor: '#7ad3ff',
+        borderColor: '#013365',
         spanGaps: true,
       },
     ],
@@ -88,11 +88,11 @@ function StockPage(props) {
       const wlurl = `https://web-production-8952.up.railway.app/watchlist/${userId}`;
       const headers = new Headers();
       headers.append(
-        "Authorization",
-        `Bearer ` + JSON.parse(localStorage.getItem("jwt"))
+        'Authorization',
+        `Bearer ` + JSON.parse(localStorage.getItem('jwt'))
       );
       let fetchData = {
-        method: "GET",
+        method: 'GET',
         headers: headers,
       };
       const wlresponse = await fetch(wlurl, fetchData);
@@ -114,11 +114,11 @@ function StockPage(props) {
       const url = `https://web-production-8952.up.railway.app/stocks/${stockid}/info`;
       const headers = new Headers();
       headers.append(
-        "Authorization",
-        `Bearer ` + JSON.parse(localStorage.getItem("jwt"))
+        'Authorization',
+        `Bearer ` + JSON.parse(localStorage.getItem('jwt'))
       );
       let fetchData = {
-        method: "GET",
+        method: 'GET',
         headers: headers,
       };
       const response = await fetch(url, fetchData);
@@ -151,11 +151,11 @@ function StockPage(props) {
       const url = `https://web-production-8952.up.railway.app/stocks/${stockid}/latestdata`;
       const headers = new Headers();
       headers.append(
-        "Authorization",
-        `Bearer ` + JSON.parse(localStorage.getItem("jwt"))
+        'Authorization',
+        `Bearer ` + JSON.parse(localStorage.getItem('jwt'))
       );
       let fetchData = {
-        method: "GET",
+        method: 'GET',
         headers: headers,
       };
       const response = await fetch(url, fetchData);
@@ -177,9 +177,9 @@ function StockPage(props) {
         let ampm;
         if (datehours > 12) {
           datehours = datehours - 12;
-          ampm = "PM";
+          ampm = 'PM';
         } else {
-          ampm = "AM";
+          ampm = 'AM';
         }
         let datefmt = `${datehours}:${datemin}:${datesec} ${ampm}`;
         setTimeCapt(datefmt);
@@ -192,11 +192,11 @@ function StockPage(props) {
       const url = `https://web-production-8952.up.railway.app/stocks/${stockid}/interval/${interval}`;
       const headers = new Headers();
       headers.append(
-        "Authorization",
-        `Bearer ` + JSON.parse(localStorage.getItem("jwt"))
+        'Authorization',
+        `Bearer ` + JSON.parse(localStorage.getItem('jwt'))
       );
       let fetchData = {
-        method: "GET",
+        method: 'GET',
         headers: headers,
       };
       const response = await fetch(url, fetchData);
@@ -229,16 +229,16 @@ function StockPage(props) {
   async function handleWatchlist(action) {
     const url = `https://web-production-8952.up.railway.app/watchlist/${userId}/${stockid}`;
     const headers = new Headers();
-    headers.append("Content-Type", "application/json");
+    headers.append('Content-Type', 'application/json');
     headers.append(
-      "Authorization",
-      `Bearer ` + JSON.parse(localStorage.getItem("jwt"))
+      'Authorization',
+      `Bearer ` + JSON.parse(localStorage.getItem('jwt'))
     );
     let info = {
       action: action,
     };
     let fetchData = {
-      method: "PUT",
+      method: 'PUT',
       body: JSON.stringify(info),
       headers: headers,
     };
@@ -249,7 +249,7 @@ function StockPage(props) {
       setInWlErr(data.message);
     } else {
       setWatchList(data.stocks);
-      if (action === "add") {
+      if (action === 'add') {
         setInWl(true);
       } else {
         setInWl(false);
@@ -266,38 +266,30 @@ function StockPage(props) {
     setStockAction(action);
   };
 
-  const handleStockAmount = useCallback((sign) => {
-    if (sign === "plus") {
-      setQuantity((currentQuantity) => {
-        currentQuantity + 1;
-      });
+  const handleStockAmount = (change) => {
+    if (change === -1 && quantity > 0) {
+      setQuantity(quantity - 1);
     } else {
-      setQuantity((currentQuantity) => {
-        let newquant = currentQuantity - 1;
-        if (newquant >= 0) {
-          return newquant;
-        }
-        return currentQuantity;
-      });
+      setQuantity(quantity + 1);
     }
-  }, []);
+  };
 
   async function handleStockOrder() {
     setOrder(true);
   }
 
   async function handleStockFinal(decision) {
-    if (decision === "cancel") {
+    if (decision === 'cancel') {
       setOrder(false);
-      setOrderErr("");
+      setOrderErr('');
       setQuantity(0);
     } else {
       const ordurl = `https://web-production-8952.up.railway.app/portfolio/${stockid}`;
       const headers = new Headers();
-      headers.append("Content-Type", "application/json");
+      headers.append('Content-Type', 'application/json');
       headers.append(
-        "Authorization",
-        `Bearer ` + JSON.parse(localStorage.getItem("jwt"))
+        'Authorization',
+        `Bearer ` + JSON.parse(localStorage.getItem('jwt'))
       );
       let info = {
         action: stockAction,
@@ -306,7 +298,7 @@ function StockPage(props) {
         userid: userId,
       };
       let fetchData = {
-        method: "PUT",
+        method: 'PUT',
         body: JSON.stringify(info),
         headers: headers,
       };
@@ -350,115 +342,115 @@ function StockPage(props) {
   }, [interval, order]);
 
   return (
-    <div className="stockpage">
-      {!stockInfo && <div className="stockmiss">Stock data loading...</div>}
+    <div className='stockpage'>
+      {!stockInfo && <div className='stockmiss'>Stock data loading...</div>}
       {stockInfo && (
-        <div className="stockcont">
-          <div className="stockfirstsec">
-            <div className="stocktitle">
+        <div className='stockcont'>
+          <div className='stockfirstsec'>
+            <div className='stocktitle'>
               {stockInfo.symbol} | {stockInfo.name}
             </div>
-            <div className="wishlisttoggle"></div>
+            <div className='wishlisttoggle'></div>
             {inWl && (
               <button
-                className="wltogbtn"
-                onClick={() => handleWatchlist("remove")}
+                className='wltogbtn'
+                onClick={() => handleWatchlist('remove')}
               >
                 Remove from watchlist
               </button>
             )}
             {!inWl && (
               <button
-                className="wltogbtn"
-                onClick={() => handleWatchlist("add")}
+                className='wltogbtn'
+                onClick={() => handleWatchlist('add')}
               >
                 Add to watchlist
               </button>
             )}
           </div>
-          <div className="stocksecondsec">
-            <div className="stockpageleft">
-              <div className="graphtitle">Performance</div>
-              <div className="graphfirstsec">
-                <div className="graphfirstleft">
-                  <div className="currentprice">
+          <div className='stocksecondsec'>
+            <div className='stockpageleft'>
+              <div className='graphtitle'>Performance</div>
+              <div className='graphfirstsec'>
+                <div className='graphfirstleft'>
+                  <div className='currentprice'>
                     $ {Number(stockLatest.last).toFixed(2)} USD
                   </div>
                   {stockDifference > 0 && (
-                    <div className="stockdiffcont">
-                      <div className="stockupsymb">
-                        <img src={"/up.svg"} alt="" className="infoimg"></img>
+                    <div className='stockdiffcont'>
+                      <div className='stockupsymb'>
+                        <img src={'/up.svg'} alt='' className='infoimg'></img>
                       </div>
-                      <div className="stockdiff">
-                        Up ${stockDifference.amount} {"("}
-                        {stockDifference.percentage}%{")"} past{" "}
+                      <div className='stockdiff'>
+                        Up ${stockDifference.amount} {'('}
+                        {stockDifference.percentage}%{')'} past{' '}
                         {intervaldesc[interval.toString()]}
                       </div>
                     </div>
                   )}
                   {stockDifference < 0 && (
-                    <div className="stockdiffcont">
-                      <div className="stockupsymb">
-                        <img src={"/down.svg"} alt="" className="infoimg"></img>
+                    <div className='stockdiffcont'>
+                      <div className='stockupsymb'>
+                        <img src={'/down.svg'} alt='' className='infoimg'></img>
                       </div>
-                      <div className="stockdiff">
-                        Down ${stockDifference.amount} {"("}
-                        {stockDifference.percentage}%{")"} past{" "}
+                      <div className='stockdiff'>
+                        Down ${stockDifference.amount} {'('}
+                        {stockDifference.percentage}%{')'} past{' '}
                         {intervaldesc[interval.toString()]}
                       </div>
                     </div>
                   )}
-                  <div className="timecaptured">As of {timeCapt}</div>
+                  <div className='timecaptured'>As of {timeCapt}</div>
                 </div>
-                <div className="graphfirstright">
-                  <button type="button" onClick={() => handleUpdate()}>
+                <div className='graphfirstright'>
+                  <button type='button' onClick={() => handleUpdate()}>
                     Update Price
                   </button>
                 </div>
               </div>
-              <div className="graphcont">
-                <div className="graphcanvas">
+              <div className='graphcont'>
+                <div className='graphcanvas'>
                   <Line options={graphoptions} data={graphdata} />
                 </div>
-                <div className="graphintervals">
+                <div className='graphintervals'>
                   <button
-                    type="button"
-                    className="intervalbtn"
+                    type='button'
+                    className='intervalbtn'
                     onClick={() => handleInterval(1)}
                   >
                     1D
                   </button>
                   <button
-                    type="button"
-                    className="intervalbtn"
+                    type='button'
+                    className='intervalbtn'
                     onClick={() => handleInterval(7)}
                   >
                     1W
                   </button>
                   <button
-                    type="button"
-                    className="intervalbtn"
+                    type='button'
+                    className='intervalbtn'
                     onClick={() => handleInterval(30)}
                   >
                     1M
                   </button>
                   <button
-                    type="button"
-                    className="intervalbtn"
+                    type='button'
+                    className='intervalbtn'
                     onClick={() => handleInterval(90)}
                   >
                     3M
                   </button>
                   <button
-                    type="button"
-                    className="intervalbtn"
+                    type='button'
+                    className='intervalbtn'
                     onClick={() => handleInterval(180)}
                   >
                     6M
                   </button>
                   <button
-                    type="button"
-                    className="intervalbtn"
+                    type='button'
+                    className='intervalbtn'
                     onClick={() => handleInterval(365)}
                   >
                     1Y
@@ -466,124 +458,125 @@ function StockPage(props) {
                 </div>
               </div>
             </div>
-            <div className="stockpageright">
-              <div className="stockactiontitle">Place an order</div>
-              <div className="stockactioncont">
+            <div className='stockpageright'>
+              <div className='stockactiontitle'>Place an order</div>
+              <div className='stockactioncont'>
                 <button
-                  type="button"
-                  className="buybtn"
-                  onClick={() => handleStockAction("buy")}
+                  type='button'
+                  className='buybtn'
+                  onClick={() => handleStockAction('buy')}
                 >
                   Buy
                 </button>
                 {position && (
                   <button
-                    type="button"
-                    className="sellbtn"
-                    onClick={() => handleStockAction("sell")}
+                    type='button'
+                    className='sellbtn'
+                    onClick={() => handleStockAction('sell')}
                   >
                     Sell
                   </button>
                 )}
               </div>
-              <div className="quantitycont">
-                <div className="stockprompt">How many shares?</div>
-                <div className="quantity">{quantity}</div>
-                <div className="stocktoggle">
+              <div className='quantitycont'>
+                <div className='stockprompt'>How many shares?</div>
+                <div className='quantity'>{quantity}</div>
+                <div className='stocktoggle'>
                   <button
-                    type="button"
-                    className="qntchgbtn"
-                    onClick={() => handleStockAmount("plus")}
+                    type='button'
+                    className='qntchgbtn'
+                    onClick={() => handleStockAmount(1)}
                   >
                     <img
-                      className="qntchgimg"
-                      src={"./pluscircle.svg"}
-                      alt=""
+                      className='qntchgimg'
+                      src={'./pluscircle.svg'}
+                      alt=''
                     ></img>
                   </button>
                   <button
-                    type="button"
-                    className="qntchgbtn"
-                    onClick={() => handleStockAmount("minus")}
+                    type='button'
+                    className='qntchgbtn'
+                    onClick={() => handleStockAmount(-1)}
                   >
                     <img
-                      className="qntchgimg"
-                      src={"./minuscircle.svg"}
-                      alt=""
+                      className='qntchgimg'
+                      src={'./minuscircle.svg'}
+                      alt=''
                     ></img>
                   </button>
                 </div>
               </div>
-              <div className="stockprice">
-                {stockInfo.symbol} price: ${Number(stockLatest.last).toFixed(2)}{" "}
+              <div className='stockprice'>
+                {stockInfo.symbol} price: ${Number(stockLatest.last).toFixed(2)}{' '}
                 USD
               </div>
-              <div className="stocktotal">
-                ${stockLatest.last * quantity} USD
+              <div className='stocktotal'>
+                ${Number(stockLatest.last).toFixed(2) * quantity} USD
               </div>
-              {stockAction === "buy" && (
+              {stockAction === 'buy' && (
                 <button
-                  type="button"
-                  className="stockorderbtn"
+                  type='button'
+                  className='stockorderbtn'
                   onClick={() => handleStockOrder()}
                 >
                   Buy {stockInfo.symbol}
                 </button>
               )}
-              {stockAction === "sell" && (
+              {stockAction === 'sell' && (
                 <button
-                  type="button"
-                  className="stockorderbtn"
+                  type='button'
+                  className='stockorderbtn'
                   onClick={() => handleStockOrder()}
                 >
                   Sell {stockInfo.symbol}
                 </button>
               )}
               {order && (
-                <div className="ordercont">
-                  <div className="ordernumber">
+                <div className='ordercont'>
+                  <div className='ordernumber'>
                     Number of shares: {quantity}
                   </div>
-                  <div className="orderprice">
-                    Updated price: {stockLatest.last}
+                  <div className='orderprice'>
+                    Updated price: {Number(stockLatest.last).toFixed(2)}
                   </div>
-                  <div className="ordertotal">
-                    Total price: {quantity * stockLatest.last}
+                  <div className='ordertotal'>
+                    Total price:{' '}
+                    {quantity * Number(stockLatest.last).toFixed(2)}
                   </div>
                   <button
-                    className="orderconfirm"
-                    onClick={() => handleStockFinal("confirm")}
+                    className='orderconfirm'
+                    onClick={() => handleStockFinal('confirm')}
                   >
                     Confirm Order
                   </button>
                   <button
-                    className="ordercancel"
-                    onClick={() => handleStockFinal("cancel")}
+                    className='ordercancel'
+                    onClick={() => handleStockFinal('cancel')}
                   >
                     Cancel order
                   </button>
-                  <div className="ordererr">{orderErr}</div>
+                  <div className='ordererr'>{orderErr}</div>
                 </div>
               )}
             </div>
           </div>
           {position && (
-            <div className="stockthirdsec">
-              <div className="stockptftitle">Your Holdings</div>
-              <div className="holdinfocont">
-                <div className="holdquantcont">
-                  <div className="holdquanttitle">Quantity</div>
-                  <div className="holdquantity">{position.quantity}</div>
+            <div className='stockthirdsec'>
+              <div className='stockptftitle'>Your Holdings</div>
+              <div className='holdinfocont'>
+                <div className='holdquantcont'>
+                  <div className='holdquanttitle'>Quantity</div>
+                  <div className='holdquantity'>{position.quantity}</div>
                 </div>
-                <div className="holdvaluecont">
-                  <div className="holdvaluetitle">Total Value</div>
-                  <div className="holdvalue">
+                <div className='holdvaluecont'>
+                  <div className='holdvaluetitle'>Total Value</div>
+                  <div className='holdvalue'>
                     ${position.quantity * stockLatest.last.toFixed(2)}
                   </div>
                 </div>
-                <div className="holdperfcont">
-                  <div className="holdperftitle">All time performance</div>
-                  <div className="holdperformance">
+                <div className='holdperfcont'>
+                  <div className='holdperftitle'>All time performance</div>
+                  <div className='holdperformance'>
                     $
                     {(
                       stockLatest.last * position.quantity -
